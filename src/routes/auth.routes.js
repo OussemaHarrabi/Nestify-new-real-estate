@@ -2,10 +2,11 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const rateLimit = require('express-rate-limit');
+const { Op } = require('sequelize'); // ✅ Ajoutez cette ligne
 const User = require('../models/User');
-const { validateRegister, validateLogin } = require('../middleware/validation');
-const auth = require('../middleware/auth');
+const { authMiddleware } = require('../middleware/auth.middleware');
 const logger = require('../utils/logger');
+const { register, login } = require('../controllers/authController');
 
 const router = express.Router();
 
@@ -82,14 +83,14 @@ const generateTokens = (userId) => {
  *       409:
  *         description: User already exists
  */
-router.post('/register', authLimiter, validateRegister, async (req, res) => {
+router.post('/register', authLimiter, async (req, res) => {
   try {
-    const { name, email, phone, password, coordinates } = req.body;
+    const { fullName, email, phone, password, coordinates } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({
       where: {
-        $or: [{ email }, { phone }]
+        [Op.or]: [{ email }, { phone }]
       }
     });
 
@@ -102,7 +103,7 @@ router.post('/register', authLimiter, validateRegister, async (req, res) => {
 
     // Create new user
     const user = await User.create({
-      name,
+      fullName, // ✅ Changé de name vers fullName
       email,
       phone,
       password,
@@ -165,7 +166,7 @@ router.post('/register', authLimiter, validateRegister, async (req, res) => {
  *       404:
  *         description: User not found
  */
-router.post('/login', authLimiter, validateLogin, async (req, res) => {
+router.post('/login', authLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -308,7 +309,7 @@ router.post('/refresh', async (req, res) => {
  *       401:
  *         description: Unauthorized
  */
-router.get('/me', auth, async (req, res) => {
+router.get('/me', authMiddleware, async (req, res) => {
   try {
     const user = await User.findByPk(req.user.userId);
     
@@ -347,7 +348,7 @@ router.get('/me', auth, async (req, res) => {
  *       200:
  *         description: Logout successful
  */
-router.post('/logout', auth, async (req, res) => {
+router.post('/logout', authMiddleware, async (req, res) => {
   try {
     // In a production app, you might want to blacklist the token
     // For now, we'll just return success

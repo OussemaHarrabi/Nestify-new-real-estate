@@ -140,12 +140,6 @@ const sanitizeSearchInput = (input) => {
 };
 
 /**
- * Format Tunisian phone number
- * @param {string} phone - Phone number to format
- * @returns {string} - Formatted phone number
- */
-
-/**
  * Calculate distance between two coordinates
  * @param {number} lat1 - Latitude 1
  * @param {number} lon1 - Longitude 1
@@ -174,6 +168,6 @@ module.exports = {
   formatPrice,
   formatSurface,
   sanitizeSearchInput,
-  validateFeatures,
+  //validateFeatures,
   calculateDistance,
 };

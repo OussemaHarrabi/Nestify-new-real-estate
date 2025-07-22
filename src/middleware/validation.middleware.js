@@ -6,12 +6,11 @@ const tunisianPhone = Joi.string().pattern(VALIDATION.PHONE_REGEX).messages({
   'string.pattern.base': 'Le numéro de téléphone doit être un numéro tunisien valide',
 });
 
+// Simplified password - just minimum 8 characters
 const password = Joi.string()
   .min(VALIDATION.MIN_PASSWORD_LENGTH)
-  .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
   .messages({
     'string.min': `Le mot de passe doit contenir au moins ${VALIDATION.MIN_PASSWORD_LENGTH} caractères`,
-    'string.pattern.base': 'Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial',
   });
 
 // Validation schemas

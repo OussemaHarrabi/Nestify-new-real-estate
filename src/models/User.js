@@ -9,7 +9,7 @@ const User = sequelize.define('User', {
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true
   },
-  name: {
+  fullName: {  // ✅ Changé pour correspondre à la validation
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
@@ -127,7 +127,7 @@ const User = sequelize.define('User', {
     { fields: ['phone'], unique: true },
     { fields: ['coordinates'], using: 'gin' },
     { fields: ['preferences'], using: 'gin' },
-    { fields: ['isActive'] },
+    { fields: ['is_active'] },  // ✅ Changé de 'isActive' vers 'is_active'
     { fields: ['role'] }
   ],
   hooks: {

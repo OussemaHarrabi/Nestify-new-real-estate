@@ -274,6 +274,6 @@ propertySchema.statics.findSimilar = async function(propertyId, limit = 6) {
     .populate('promoter_id');
 };
 
-const Property = mongoose.model('Property', propertySchema);
+const Property = mongoose.model('Property', propertySchema, 'properties');
 
 module.exports = Property;

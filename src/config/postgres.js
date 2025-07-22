@@ -1,5 +1,5 @@
 const { Sequelize } = require('sequelize');
-const logger = require('../utils/logger');
+// const logger = require('../utils/logger');  // Commenté temporairement
 
 // Create Sequelize instance
 const sequelize = new Sequelize({
@@ -9,7 +9,7 @@ const sequelize = new Sequelize({
   database: process.env.POSTGRES_DB || 'nestify_users',
   username: process.env.POSTGRES_USER || 'postgres',
   password: process.env.POSTGRES_PASSWORD || 'postgres',
-  logging: process.env.NODE_ENV === 'development' ? logger.info.bind(logger) : false,
+  logging: process.env.NODE_ENV === 'development' ? console.log : false,  // Changé
   pool: {
     max: 5,
     min: 0,
@@ -27,16 +27,16 @@ const sequelize = new Sequelize({
 const connectPostgres = async () => {
   try {
     await sequelize.authenticate();
-    logger.info('PostgreSQL Connected Successfully');
+    console.log('✅ Connected to PostgreSQL');  // Changé
     
     // Sync models in development
     if (process.env.NODE_ENV === 'development') {
       await sequelize.sync({ alter: true });
-      logger.info('PostgreSQL models synchronized');
+      console.log('✅ PostgreSQL models synchronized');  // Changé
     }
   } catch (error) {
-    logger.error('PostgreSQL connection error:', error);
-    process.exit(1);
+    console.error('❌ PostgreSQL connection error:', error);  // Changé
+    // process.exit(1);  // Commenté pour éviter l'arrêt du serveur
   }
 };
 
